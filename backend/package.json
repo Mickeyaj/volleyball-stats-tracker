@@ -1,0 +1,15 @@
+{
+    "name": "volleyball-stats-backend",
+    "version": "1.0.0",
+    "description": "Backend for volleyball stats tracker",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "express": "^4.18.2",
+        "cors": "^2.8.5",
+        "better-sqlite3": "^9.2.2",
+        "ws": "^18.14.2"
+    }
+}
