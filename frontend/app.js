@@ -96,3 +96,73 @@ async function createGame() {
         alert('Failed to create game. Make sure the server is running!');
     }
 }
+
+async function addPlayers() {
+    const name = document.getElementById('player-name').value.trim();
+    const jerseyNumber = document.getElementById('jersey-number').value;
+    const position = document.getElementById('position-select').value;
+
+    if (!name || !position) {
+        alert('Please enter player name and select a position');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_URL}/games/${currentGameId}/players`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name,
+                jerseyNumber: jerseyNumber || null,
+                position: parseInt(position)
+            })
+        });
+
+        if (response.ok) {
+            document.getElementById('player-name').value = '';
+            document.getElementById('jersey-number').value = '';
+            document.getElementById('position-select').value = '';
+
+            await loadPlayers();
+        }
+    } catch (error) {
+        console.error('Error adding player:', error);
+        alert('Failed to add player');
+    }
+}
+
+async function loadPlayers() {
+    try {
+        const response = await fetch(`${API_URL}/games/${currentGameId}/players`);
+        currentPlayers = await response.json();
+        displayPlayers();
+
+        if(currentPlayers === 6) {
+            document.getElementById('start-tracking-btn').classList.remove('hidden');
+        }
+    } catch (error) {
+        console.error('Error loading players:', error);
+    }
+}
+
+function displayPlayers() {
+    const playerList = document.getElementById('player-list');
+
+    if (currentPlayers.length === 0) {
+        playerList.innerHTML = '<p>No players added yet.</p>';
+        return
+    }
+
+    playerList.innerHTML = '';
+    currentPlayers.forEach(player => {
+        const playerItem = document.createElement('div');
+        playerItem.className = 'player-item';
+        playerItem.innerHTML = `
+            <strong>${player.name}</strong>
+            ${player.jersey_number ? `(#${player.jersey_number})` : ''}
+            - Position ${player.position}
+        `;
+        playerList.appendChild(playerItem);
+    });
+}
+
