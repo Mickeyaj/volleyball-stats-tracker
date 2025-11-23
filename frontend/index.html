@@ -37,12 +37,12 @@
                     <input type="number" id="jersey-number" placeholder="Jersey #" min="0" max="99">
                     <select id="position-select">
                         <option value="">Select Position</option>
-                        <option value="1">Right Back</option>
-                        <option value="2">Right Front</option>
-                        <option value="3">Middle</option>
-                        <option value="4">Left Front</option>
-                        <option value="5">Left Back</option>
-                        <option value="6">Middle Back</option>
+                        <option value="1">Position 1</option>
+                        <option value="2">Position 2</option>
+                        <option value="3">Position 3</option>
+                        <option value="4">Position 4</option>
+                        <option value="5">Position 5</option>
+                        <option value="6">Position 6</option>
                     </select>
                     <button id="add-player-btn" class="btn btn-primary">Add Player</button>
                 </div>
@@ -50,8 +50,81 @@
                 <button id="start-tracking-btn" class="btn btn-success hidden">Start Tracking</button>
             </section>
 
-        </div>
+            <section id="tracking-section" class="section hidden">
+                <h2>Live Game Tracking</h2>
 
+                <div class="court-container">
+                    <h3>Court Positions (Click to select player)</h3>
+                    <div class="volleyball-court">
+                        <div class="court-row">
+                            <div class="court-position" data-position="4">
+                                <div class="position-label">4</div>
+                                <div class="player-info" id="player-pos-4"></div>
+                            </div>
+                            <div class="court-position" data-position="3">
+                                <div class="position-label">3</div>
+                                <div class="player-info" id="player-pos-3"></div>
+                            </div>
+                            <div class="court-position" data-position="2">
+                                <div class="position-label">2</div>
+                                <div class="player-info" id="player-pos-2"></div>
+                            </div>
+                        </div>
+                        <div class="net">NET</div>
+                        <div class="court-row">
+                            <div class="court-position" data-position="5">
+                                <div class="position-label">5</div>
+                                <div class="player-info" id="player-pos-5"></div>
+                            </div>
+                            <div class="court-position" data-position="6">
+                                <div class="position-label">6</div>
+                                <div class="player-info" id="player-pos-6"></div>
+                            </div>
+                            <div class="court-position" data-position="1">
+                                <div class="position-label">1</div>
+                                <div class="player-info" id="player-pos-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="selected-player-info" class="selected-player-info hidden">
+                    <h3>Recording stats for: <span id="selected-player-name"></span></h3>
+                </div>
+
+                <div class="stat-button">
+                    <h3>Record Stats</h3>
+                    <div class="button-grid">
+                        <button class="stat-btn" data-stat="kill">Kill</button>
+                        <button class="stat-btn" data-stat="ace">Ace</button>
+                        <button class="stat-btn" data-stat="dig">Dig</button>
+                        <button class="stat-btn" data-stat="block">Block</button>
+                        <button class="stat-btn" data-stat="assist">Assist</button>
+                        <button class="stat-btn" data-stat="error">Error</button>
+                    </div>
+                </div>
+
+                <div class="stats-display">
+                    <h3>Live Stats</h3>
+                    <table id="stats-table">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Kills</th>
+                                <th>Aces</th>
+                                <th>Digs</th>
+                                <th>Blocks</th>
+                                <th>Assists</th>
+                                <th>Errors</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stats-tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
         <script src="app.js"></script>
     </body>
 </html>
