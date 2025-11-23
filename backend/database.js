@@ -62,8 +62,8 @@ function saveDatabase() {
 
 const dbOperations = {
     createGame: (teamName, opponentName, date) => {
-        const stmt = db.prepare('INSERT INTO games (team_name, opponent_name, date) VALUE (?, ?, ?)');
-        stmt.run([teamName, opponentName, date]);
+        db.run('INSERT INTO games (team_name, opponent_name, date) VALUES (?, ?, ?)',
+            [teamName, opponentName, date]);
         const result = db.exec('SELECT last_insert_rowid() as id');
         saveDatabase();
         return result[0].values[0][0];
@@ -83,8 +83,8 @@ const dbOperations = {
     },
 
     addPlayer: (gameId, name, jerseyNumber, position) => {
-        const stmt = db.prepare('INSERT INTO players (game_id, name, jersey_number, position) VALUES (?, ?, ?, ?)');
-        stmt.run([gameId, name, jerseyNumber, position]);
+        db.run('INSERT INTO players (game_id, name, jersey_number, position) VALUES (?, ?, ?, ?)',
+            [gameId, name, jerseyNumber, position]);
         const result = db.exec('SELECT last_insert_rowid() as id');
         saveDatabase();
         return result[0].values[0][0];
@@ -105,7 +105,7 @@ const dbOperations = {
     recordStat: (gameId, playerId, statType) => {
         const existing = db.exec('SELECT value FROM stats WHERE game_id = ? AND player_id = ? AND stat_type = ?',
                             [gameId, playerId, statType]);
-        if (existing.length > 0 && exisitng[0].values.length > 0) {
+        if (existing.length > 0 && existing[0].values.length > 0) {
             const currentValue = existing[0].values[0][0];
             const newValue = currentValue + 1;
             db.run('UPDATE stats SET value = ? WHERE game_id = ? AND player_id = ? and stat_type = ?',

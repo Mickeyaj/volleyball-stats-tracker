@@ -57,8 +57,12 @@ function handleWebSocketMessage(data) {
 }
 
 async function createGame() {
+    console.log('Create ga,e button clicked');
     const teamName = document.getElementById('team-name').value.trim();
     const opponentName = document.getElementById('opponent-name').value.trim();
+
+    console.log('TeamName:', teamName);
+    console.log('Opponent:', opponentName);
 
     if (!teamName) {
         alert ('Please enter a team name');
@@ -66,6 +70,7 @@ async function createGame() {
     }
 
     try {
+        console.log('sending request to create game...');
         const response = await fetch(`${API_URL}/games`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -73,16 +78,19 @@ async function createGame() {
         });
 
         const data = await response.json();
+        console.log('game created:', data);
         currentGameId = data.gameId;
 
-        if (ws.readyState === WebSocket.OPEN) {
+        if (ws && ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify({ type: 'subscribe', gameId: currentGameId }));
         }
 
+        console.log('hiding setup, showing player setup');
         setupSection.classList.add('hidden');
         playerSetupSection.classList.remove('hidden');
 
         console.log('Game created with ID:', currentGameId);
+
     } catch (error) {
         console.log('Error creating game:', error);
         alert('Failed to create game. Make sure the server is running!');
