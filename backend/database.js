@@ -62,7 +62,7 @@ function saveDatabase() {
 
 const dbOperations = {
     createGame: (teamName, opponentName, date) => {
-        db.run('INSERT INTO games (team_name, opponent_name, date) VALUES (?, ?, ?)',
+        db.run('INSERT INTO games (team_name, opponent_name, date) VALUE (?, ?, ?)',
             [teamName, opponentName, date]);
         const result = db.exec('SELECT last_insert_rowid() as id');
         saveDatabase();
@@ -84,7 +84,8 @@ const dbOperations = {
 
     addPlayer: (gameId, name, jerseyNumber, position) => {
         db.run('INSERT INTO players (game_id, name, jersey_number, position) VALUES (?, ?, ?, ?)',
-            [gameId, name, jerseyNumber, position]);
+            [gameId, name, jerseyNumber, position]
+);
         const result = db.exec('SELECT last_insert_rowid() as id');
         saveDatabase();
         return result[0].values[0][0];
