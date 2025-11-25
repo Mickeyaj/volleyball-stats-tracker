@@ -62,7 +62,7 @@ function saveDatabase() {
 
 const dbOperations = {
     createGame: (teamName, opponentName, date) => {
-        db.run('INSERT INTO games (team_name, opponent_name, date) VALUE (?, ?, ?)',
+        db.run('INSERT INTO games (team_name, opponent_name, date) VALUES (?, ?, ?)',
             [teamName, opponentName, date]);
         const result = db.exec('SELECT last_insert_rowid() as id');
         saveDatabase();
@@ -144,4 +144,4 @@ const dbOperations = {
 
 };
 
-module.exports = { initializeDatabase, dbOperations, saveDatabase}
+module.exports = { initializeDatabase, dbOperations, saveDatabase }
