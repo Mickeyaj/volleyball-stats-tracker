@@ -80,7 +80,7 @@ app.post('/api/games/:gameId/players', (req, res) => {
     }
 });
 
-app.post('api/games/:gameId/stats', (req, res) => {
+app.post('/api/games/:gameId/stats', (req, res) => {
     try {
         const { playerId, statType } = req.body;
         const result = dbOperations.recordStat(

@@ -259,7 +259,7 @@ function initializeStatsDisplay() {
         const row = document.createElement('tr');
         row.id = `stats-row-${player.id}`;
         row.innerHTML = `
-            <td><strong>${player.name}${player.jersey_number ? ' (#' + player.jersey_number + ')' : ''}<strong>></td>
+            <td><strong>${player.name}${player.jersey_number ? ' (#' + player.jersey_number + ')' : ''}<strong></td>
             <td class="stat-value" data-stat="kill">0</td>
             <td class="stat-value" data-stat="ace">0</td>
             <td class="stat-value" data-stat="dig">0</td>
