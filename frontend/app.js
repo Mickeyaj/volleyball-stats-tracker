@@ -141,8 +141,14 @@ async function loadPlayers() {
         currentPlayers = await response.json();
         displayPlayers();
 
-        if(currentPlayers === 6) {
-            document.getElementById('start-tracking-btn').classList.remove('hidden');
+        if(currentPlayers.length === 6) {
+            console.log('Showing start tracking button');
+            const button = document.getElementById('start-tracking-btn');
+            console.log('Button element:', button);
+            button.classList.remove('hidden');
+            console.log('Button classes after remove:', button.classList);
+        } else {
+            console.log('Only have', currentPlayers.length, 'players, need 6');
         }
     } catch (error) {
         console.error('Error loading players:', error);
