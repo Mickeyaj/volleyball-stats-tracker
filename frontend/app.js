@@ -175,7 +175,7 @@ function startTracking() {
     trackingSection.classList.remove('hidden');
 
     updateCourtPositions();
-    initializeStateDisplay();
+    initializeStatsDisplay();
 }
 
 async function handleCourtClick(event) {
@@ -245,6 +245,22 @@ function updateCourtPositions() {
     });
 }
 
-function initializeStateDisplay() {
-    console.log('Initializing stats display');
+function initializeStatsDisplay() {
+    const tbody = document.getElementById('stats-tbody');
+    tbody.innerHTML = '';
+
+    currentPlayers.forEach(player => {
+        const row = document.createElement('tr');
+        row.id = `stats-row-${player.id}`;
+        row.innerHTML = `
+            <td><strong>${player.name}${player.jersey_number ? ' (#' + player.jersey_number + ')' : ''}<strong>></td>
+            <td class="stat-value" data-stat="kill">0</td>
+            <td class="stat-value" data-stat="ace">0</td>
+            <td class="stat-value" data-stat="dig">0</td>
+            <td class="stat-value" data-stat="block">0</td>
+            <td class="stat-value" data-stat="assist">0</td>
+            <td class="stat-value" data-stat="error">0</td>
+        `;
+        tbody.appendChild(row);
+    });
 }
