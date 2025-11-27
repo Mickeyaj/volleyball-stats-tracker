@@ -57,6 +57,11 @@ function connectWebSocket() {
 
 function handleWebSocketMessage(data) {
     console.log('Received:', data);
+
+    if (data.type === 'stat_updated') {
+        console.log('Updating stats display');
+        updateStatsDisplay(data.stats);
+    }
 }
 
 async function createGame() {
@@ -268,5 +273,37 @@ function initializeStatsDisplay() {
             <td class="stat-value" data-stat="error">0</td>
         `;
         tbody.appendChild(row);
+    });
+}
+
+function updateStatsDisplay(stats) {
+    const playerStats = {};
+    stats.forEach(stat => {
+        if (!playerStats[stat.id]) {
+            playerStats[stat.id] = {
+                name: stat.name,
+                jerseyNumber: stat.jersey_number,
+                stats: {}
+            };
+        }
+        if (stat.stat_type) {
+            playerStats[stat.id].stats[stat.stat_type] = stat.value;
+        }
+    });
+
+    Object.keys(playerStats).forEach(playerId => {
+        const row = document.getElementById(`stats-row-${playerId}`);
+        if (row) {
+            const player = playerStats[playerId];
+            const statTypes = ['kill', 'ace', 'dig', 'block', 'assist', 'error'];
+
+            statTypes.forEach(statType => {
+                const cell = row.querySelector(`[data-stat="${statType}"]`);
+                if (cell) {
+                    const value = player.stats[statType] || 0;
+                    cell.textContent = value;
+                }
+            });
+        }
     });
 }
