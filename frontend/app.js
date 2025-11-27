@@ -17,7 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function setupEventListeners() {
-    document.getElementById('create-game-btn').addEventListener('click', createGame);
+    document.getElementById('create-game-btn').addEventListener('click', (event) => {
+        event.preventDefault();
+        createGame(event);
+    });
     document.getElementById('add-player-btn').addEventListener('click', addPlayer);
     document.getElementById('start-tracking-btn').addEventListener('click', startTracking);
 
@@ -57,7 +60,8 @@ function handleWebSocketMessage(data) {
 }
 
 async function createGame() {
-    console.log('Create ga,e button clicked');
+    event.preventDefault();
+    console.log('Create game button clicked');
     const teamName = document.getElementById('team-name').value.trim();
     const opponentName = document.getElementById('opponent-name').value.trim();
 
@@ -97,7 +101,7 @@ async function createGame() {
     }
 }
 
-async function addPlayers() {
+async function addPlayer() {
     const name = document.getElementById('player-name').value.trim();
     const jerseyNumber = document.getElementById('jersey-number').value;
     const position = document.getElementById('position-select').value;
@@ -166,3 +170,34 @@ function displayPlayers() {
     });
 }
 
+function startTracking() {
+    playerSetupSection.classList.add('hidden');
+    trackingSection.classList.remove('hidden');
+
+    updateCourtPositions();
+    initializeStateDisplay();
+}
+
+function handleCourtClick(event) {
+    console.log('Court cliked:', event.currentTarget.dataset.position);
+}
+
+function handleStatClick(event) {
+    console.log('Stat clicked:', event.target.dataset.stat);
+}
+
+function updateCourtPositions() {
+    currentPlayers.forEach(player => {
+        const posElement = document.getElementById(`player-pos-${player.position}`);
+        if (posElement) {
+            posElement.innerHTML = `
+            <span style="font-weight: bold; display: block;">${player.name}</span>
+            ${player.jersey_number ? `<span style="font-size: 1.2em; font-weight: bold;">#${player.jersey_number}</span>` : ''}
+            `;
+        }
+    });
+}
+
+function initializeStateDisplay() {
+    console.log('Initializing stats display');
+}
