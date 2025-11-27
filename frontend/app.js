@@ -178,12 +178,59 @@ function startTracking() {
     initializeStateDisplay();
 }
 
-function handleCourtClick(event) {
-    console.log('Court cliked:', event.currentTarget.dataset.position);
+async function handleCourtClick(event) {
+    const position = parseInt(event.currentTarget.dataset.position);
+    const player = currentPlayers.find(p => p.position === position);
+
+    if (!player) {
+        alert('No player at this position');
+        return;
+    }
+
+    selectedPlayerId = player.id;
+
+    console.log('Selected player:', player);
+
+    document.querySelectorAll('.court-position').forEach(pos => {
+        pos.classList.remove('active');
+    });
+
+    event.currentTarget.classList.add('active');
+
+    document.getElementById('selected-player-info').classList.remove('hidden');
+    document.getElementById('selected-player-name').textContent = `${player.name}${player.jersey_number ? ' (#' + player.jersey_number+ ')' : ''}`;
 }
 
-function handleStatClick(event) {
-    console.log('Stat clicked:', event.target.dataset.stat);
+async function handleStatClick(event) {
+    if (!selectedPlayerId) {
+        alert('Please select a player first by clicking on a court position');
+        return;
+    }
+
+    const statType = event.target.dataset.stat;
+    console.log('Recording stat:', statType, 'for player:', selectedPlayerId);
+
+    try {
+        const response = await fetch(`${API_URL}/games/${currentGameId}/stats`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                playerId: selectedPlayerId,
+                statType: statType
+            })
+        });
+
+        const result = await response.json();
+        console.log('stat recorded:', result);
+
+        event.target.style.transform = 'scale(1.1)';
+        setTimeout(() => {
+            event.target.style.transform = '';
+        }, 200);
+    } catch (error) {
+        console.error('Error recording stat:', error);
+        alert('Failed to record stat');
+    }
 }
 
 function updateCourtPositions() {
