@@ -110,12 +110,12 @@ const dbOperations = {
             const currentValue = existing[0].values[0][0];
             const newValue = currentValue + 1;
             db.run('UPDATE stats SET value = ? WHERE game_id = ? AND player_id = ? and stat_type = ?',
-                [gameId, playerId, statType]);
+                [newValue, gameId, playerId, statType]);
             saveDatabase();
             return { playerId, statType, value: newValue };
         } else {
             db.run('INSERT INTO stats (game_id, player_id, stat_type, value) VALUES (?, ?, ?, ?)',
-                [gameId, playerId, statType]);
+                [gameId, playerId, statType, 1]);
             saveDatabase();
             return { playerId, statType, value: 1 };
         }

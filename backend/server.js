@@ -115,12 +115,14 @@ wss.on('connection', (ws) => {
         const data = JSON.parse(message);
 
         if (data.type === 'subscribe' && data.gameId) {
+            console.log('Subscribe - gameId:', data.gameId, 'type:', typeof data.gameId);
             ws.gameId = data.gameId;
             if (!gameConnections.has(data.gameId)) {
                 gameConnections.set(data.gameId, new Set());
             }
             gameConnections.get(data.gameId).add(ws);
             console.log(`Client subscribed to game ${data.gameId}`);
+            console.log('gameConnections now has keys:', Array.from(gameConnections.keys()));
         }
     });
 
@@ -132,13 +134,26 @@ wss.on('connection', (ws) => {
 });
 
 function broadcastToGame(gameId, data) {
+    console.log('broadcastToGame called for game:', gameId, 'type:', typeof gameId);
+    console.log('gameConnections keys:', Array.from(gameConnections.keys()));
+    console.log('gameConnections has this game?', gameConnections.has(gameId));
+    gameId = parseInt(gameId);
     if(gameConnections.has(gameId)) {
+        console.log('Number of clients:', gameConnections.get(gameId).size);
         const message = JSON.stringify(data);
+        console.log('Broadcasting message:', message);
         gameConnections.get(gameId).forEach((client) => {
+            console.log('Client ready state:', client.readyState);
             if (client.readyState === WebSocket.OPEN) {
+                console.log('Sending to client');
                 client.send(message);
+            } else {
+                console.log('Client not open, skipping');
             }
         });
+        console.log('Broadcast complete');
+    } else {
+        console.log('No connections for this game!');
     }
 }
 

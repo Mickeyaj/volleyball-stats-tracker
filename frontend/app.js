@@ -59,8 +59,11 @@ function handleWebSocketMessage(data) {
     console.log('Received:', data);
 
     if (data.type === 'stat_updated') {
-        console.log('Updating stats display');
+        console.log('IT IS A STAT UPDATE!');
+        console.log('Stats data:', data.stats);
         updateStatsDisplay(data.stats);
+    } else {
+        console.log('Message type was NOT stat_updated, it was:', data.type);
     }
 }
 
@@ -92,6 +95,7 @@ async function createGame() {
 
         if (ws && ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify({ type: 'subscribe', gameId: currentGameId }));
+            console.log('Subscribed to game via WebSocket:', currentGameId);
         }
 
         console.log('hiding setup, showing player setup');
@@ -277,6 +281,9 @@ function initializeStatsDisplay() {
 }
 
 function updateStatsDisplay(stats) {
+    console.log('number of stat entries:', stats.length);
+    console.log('first stat entry:', stats[0]);
+    console.log('All stats:', stats);
     const playerStats = {};
     stats.forEach(stat => {
         if (!playerStats[stat.id]) {
@@ -291,16 +298,20 @@ function updateStatsDisplay(stats) {
         }
     });
 
+    console.log('Grouped player stats:', playerStats);
+
     Object.keys(playerStats).forEach(playerId => {
+        console.log('Looking for row:', `stats-row${playerId}`);
         const row = document.getElementById(`stats-row-${playerId}`);
+        console.log('Found row:', row);
         if (row) {
-            const player = playerStats[playerId];
             const statTypes = ['kill', 'ace', 'dig', 'block', 'assist', 'error'];
 
             statTypes.forEach(statType => {
                 const cell = row.querySelector(`[data-stat="${statType}"]`);
                 if (cell) {
-                    const value = player.stats[statType] || 0;
+                    const value = playerStats[playerId].stats[statType] || 0;
+                    console.log(`Setting ${statType} to ${value} for player ${playerId}`);
                     cell.textContent = value;
                 }
             });
